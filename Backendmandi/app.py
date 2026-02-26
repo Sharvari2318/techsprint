@@ -1,78 +1,86 @@
+from fastapi import FastAPI, Query
 import requests
 
-def get_lat_lon(location):
-    url = f"https://nominatim.openstreetmap.org/search?q={location}&format=json&limit=1"
-    response = requests.get(url).json()
-
-    if response:
-        lat = response[0]["lat"]
-        lon = response[0]["lon"]
-        return lat, lon
-    return None, None
-from fastapi import FastAPI, Query
-from mandi_api import get_mandi_data
-
-# Weather module imports (UNCHANGED)
-from modules.weather import fetch_weather_data
-from modules.harvest import harvest_recommendation
-from modules.spoilage import spoilage_simulation
+from Backendmandi.modules.weather import fetch_weather_data
+from Backendmandi.modules.decision import smart_decision_engine
+from Backendmandi.mandi_api import get_mandi_data
 
 app = FastAPI()
 
-#  Home Route
-@app.get("/")
-def home():
-    return {"message": "AgriChain Backend Running"}
 
-#  Mandi Route
-@app.get("/market-price")
-def market(state: str, commodity: str, market: str):
-    return get_mandi_data(state, commodity, market)
+# -----------------------------------
+# Convert location → latitude & longitude
+# -----------------------------------
+def get_lat_lon(location: str):
+    url = "https://nominatim.openstreetmap.org/search"
 
-# Weather Advisor (Converted from Flask)
-@app.get("/advisor")
-def advisor(lat: str = Query(...), lon: str = Query(...)):
-
-    # Fetch weather data
-    df = fetch_weather_data(lat, lon)
-
-    # Harvest recommendation
-    harvest_data = harvest_recommendation(df)
-
-    # Spoilage simulation
-    max_temp = df["temperature_2m"].max()
-    spoilage_results = spoilage_simulation(max_temp)
-
-    return {
-        "harvest": harvest_data,
-        "spoilage_analysis": spoilage_results
+    params = {
+        "q": location,
+        "format": "json",
+        "limit": 1
     }
 
-#  Smart Combined Advisor
+    headers = {
+        "User-Agent": "AgriChain-App"
+    }
+
+    try:
+        response = requests.get(url, params=params, headers=headers, timeout=10)
+
+        if response.status_code != 200:
+            return None, None
+
+        data = response.json()
+
+        if data:
+            return data[0]["lat"], data[0]["lon"]
+
+    except Exception as e:
+        print("Location API Error:", e)
+
+    return None, None
+
+
+# -----------------------------------
+# Root Route
+# -----------------------------------
+@app.get("/")
+def home():
+    return {"message": "AgriChain Unified Backend Running 🚀"}
+
+
+# -----------------------------------
+# Smart Unified Advisor
+# -----------------------------------
 @app.get("/smart-advisor")
-def smart_advisor(state: str, commodity: str, market: str, location: str):
+def smart_advisor(
+    state: str = Query(...),
+    commodity: str = Query(...),
+    market: str = Query(...),
+    location: str = Query(...),
+    quantity: int = Query(100)
+):
+
+    # 1️⃣ Convert location to lat/lon
     lat, lon = get_lat_lon(location)
+
     if not lat or not lon:
-        return {"error": "Invalid location"}
-    mandi = get_mandi_data(state, commodity, market)
-    trend = mandi["trend"]
+        return {"error": "Invalid location provided"}
 
-    # Real weather logic now (not random anymore)
+    # 2️⃣ Fetch weather data
     df = fetch_weather_data(lat, lon)
-    max_temp = df["temperature_2m"].max()
-    spoilage_results = spoilage_simulation(max_temp)
 
-    # Simple decision logic
-    if trend == "Rising":
-        final_advice = "WAIT — Prices rising."
-    elif trend == "Falling":
-        final_advice = "SELL NOW — Prices dropping."
-    else:
-        final_advice = "Observe market trends."
+    # 3️⃣ Fetch mandi data
+    mandi_data = get_mandi_data(state, commodity, market)
+
+    if not mandi_data:
+        return {"error": "No mandi data found for given inputs"}
+
+    # 4️⃣ Run smart decision engine
+    final_result = smart_decision_engine(df, mandi_data, quantity)
 
     return {
-        "mandi": mandi,
-        "harvest": harvest_recommendation(df),
-        "spoilage": spoilage_results,
-        "final_advice": final_advice
+        "location": location,
+        "mandi_details": mandi_data,
+        "analysis": final_result
     }
