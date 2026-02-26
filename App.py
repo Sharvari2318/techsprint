@@ -1,37 +1,34 @@
 from flask import Flask, request, jsonify
-import requests
+from modules.weather import fetch_weather_data
+from modules.harvest import harvest_recommendation
+from modules.spoilage import spoilage_simulation
 
 app = Flask(__name__)
 
-@app.route("/weather", methods=["GET"])
-def get_weather():
+@app.route("/advisor", methods=["GET"])
+def advisor():
+
     lat = request.args.get("lat")
     lon = request.args.get("lon")
 
     if not lat or not lon:
         return jsonify({"error": "Latitude and Longitude required"}), 400
 
-    url = "https://api.open-meteo.com/v1/forecast"
+    # Fetch weather data
+    df = fetch_weather_data(lat, lon)
 
-    params = {
-        "latitude": lat,
-        "longitude": lon,
-        "hourly": "temperature_2m,relative_humidity_2m,precipitation",
-        "forecast_days": 5
-    }
+    # Harvest recommendation (with explainability)
+    harvest_data = harvest_recommendation(df)
 
-    response = requests.get(url, params=params)
-    data = response.json()
+    # Spoilage simulation
+    max_temp = df["temperature_2m"].max()
+    spoilage_results = spoilage_simulation(max_temp)
 
-    # Extract only required fields
-    result = {
-        "time": data["hourly"]["time"],
-        "temperature": data["hourly"]["temperature_2m"],
-        "humidity": data["hourly"]["relative_humidity_2m"],
-        "rain": data["hourly"]["precipitation"]
-    }
+    return jsonify({
+        "harvest": harvest_data,
+        "spoilage_analysis": spoilage_results
+    })
 
-    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(debug=True)
