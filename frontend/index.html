@@ -2,43 +2,221 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>AgriChain Smart Advisor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriChain App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #eef2f7;
+        }
+
+        .navbar {
+            height: 60px;
+            background: #2e7d32;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+        }
+
+        .app {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 220px;
+            background: white;
+            min-height: calc(100vh - 60px);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            padding-top: 20px;
+        }
+
+        .sidebar button {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar button:hover {
+            background: #f0f4f8;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+            max-width: 1000px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button.primary {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 120px auto;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>🌾 AgriChain Advisor</h2>
 
-    <input id="state" placeholder="State"><br><br>
-    <input id="commodity" placeholder="Commodity"><br><br>
-    <input id="market" placeholder="Market"><br><br>
-    <input id="location" placeholder="Location"><br><br>
-    <input id="quantity" placeholder="Quantity"><br><br>
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="login-container card">
+    <h2>Login to AgriChain</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button class="primary" onclick="login()">Login</button>
+</div>
 
-    <button onclick="getAdvice()">Get Advice</button>
+<!-- MAIN APP -->
+<div id="mainApp" class="hidden">
 
-    <pre id="result"></pre>
+    <div class="navbar">
+        <div>AgriChain</div>
+        <button onclick="logout()" style="background:none;color:white;border:none;cursor:pointer;">
+            Logout
+        </button>
+    </div>
 
-    <script>
-        async function getAdvice() {
-            const state = document.getElementById("state").value;
-            const commodity = document.getElementById("commodity").value;
-            const market = document.getElementById("market").value;
-            const location = document.getElementById("location").value;
-            const quantity = document.getElementById("quantity").value;
+    <div class="app">
 
-            const response = await fetch(
-                `http://127.0.0.1:8000/smart-advisor?state=${state}&commodity=${commodity}&market=${market}&location=${location}&quantity=${quantity}`
-            );
+        <div class="sidebar">
+            <button onclick="showSection('home')">Home</button>
+            <button onclick="showSection('advisor')">Smart Advisor</button>
+            <button onclick="showSection('harvest')">Harvest Planner</button>
+            <button onclick="showSection('spoilage')">Spoilage Risk</button>
+            <button onclick="showSection('contact')">Contact</button>
+        </div>
 
-            const data = await response.json();
-            document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+        <div class="content">
+
+            <div id="homeSection">
+                <div class="card">
+                    <h2>Welcome to AgriChain</h2>
+                    <p>Smart Agricultural Decision Support Platform.</p>
+                </div>
+            </div>
+
+            <div id="advisorSection" class="hidden">
+                <div class="card">
+                    <h2>Smart Market Advisor</h2>
+                    <input placeholder="State">
+                    <input placeholder="Commodity">
+                    <input placeholder="Market">
+                    <input placeholder="Location">
+                    <input placeholder="Quantity">
+                    <button class="primary">Analyze</button>
+                </div>
+            </div>
+
+            <div id="harvestSection" class="hidden">
+                <div class="card">
+                    <h2>Harvest Planner</h2>
+                    <p>Harvest prediction module UI here.</p>
+                </div>
+            </div>
+
+            <div id="spoilageSection" class="hidden">
+                <div class="card">
+                    <h2>Spoilage Risk Analysis</h2>
+                    <p>Spoilage risk module UI here.</p>
+                </div>
+            </div>
+
+            <div id="contactSection" class="hidden">
+                <div class="card">
+                    <h2>Contact Us</h2>
+                    <p>Email: support@agrichain.com</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+async function login() {
+
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    if (!username || !password) {
+        alert("Please enter username and password");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://127.0.0.1:8000/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.detail || "Login failed");
+            return;
         }
 
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js');
-        }
-    </script>
+        document.getElementById("loginPage").classList.add("hidden");
+        document.getElementById("mainApp").classList.remove("hidden");
+
+    } catch (error) {
+        alert("Backend not reachable. Make sure FastAPI is running.");
+    }
+}
+
+function logout() {
+    document.getElementById("mainApp").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+}
+
+function showSection(section) {
+    const sections = ["home","advisor","harvest","spoilage","contact"];
+    sections.forEach(s => {
+        document.getElementById(s + "Section").classList.add("hidden");
+    });
+    document.getElementById(section + "Section").classList.remove("hidden");
+}
+
+</script>
+
 </body>
 </html>

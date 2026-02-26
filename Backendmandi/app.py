@@ -1,12 +1,27 @@
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 import requests
 
 from Backendmandi.modules.weather import fetch_weather_data
 from Backendmandi.modules.decision import smart_decision_engine
+from Backendmandi.modules.risk_radar import build_risk_radar   # ⭐ NEW
 from Backendmandi.mandi_api import get_mandi_data
 
+# -----------------------------
+# Create FastAPI App
+# -----------------------------
 app = FastAPI()
 
+# -----------------------------
+# Enable CORS
+# -----------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # -----------------------------------
 # Convert location → latitude & longitude
@@ -25,7 +40,12 @@ def get_lat_lon(location: str):
     }
 
     try:
-        response = requests.get(url, params=params, headers=headers, timeout=10)
+        response = requests.get(
+            url,
+            params=params,
+            headers=headers,
+            timeout=10
+        )
 
         if response.status_code != 200:
             return None, None
@@ -39,29 +59,6 @@ def get_lat_lon(location: str):
         print("Location API Error:", e)
 
     return None, None
-
-
-# -----------------------------------
-# Farmer Friendly Output Layer (NEW)
-# -----------------------------------
-def farmer_friendly_view(analysis):
-
-    spoilage = analysis.get("spoilage", {})
-    financial = spoilage.get("financial_impact", {})
-
-    safer_option = spoilage.get("safer_storage_option", "Not Available")
-    savings = financial.get("potential_savings_with_cold_storage", 0)
-
-    if safer_option == "Cold Storage":
-        storage_message = "✅ Cold storage recommended to reduce crop loss."
-    else:
-        storage_message = "ℹ️ Normal storage is currently acceptable."
-
-    return {
-        "big_indicator": f"Safer Option: {safer_option}",
-        "simple_storage_advice": storage_message,
-        "estimated_savings": f"Potential savings with cold storage: ₹{savings}"
-    }
 
 
 # -----------------------------------
@@ -84,30 +81,32 @@ def smart_advisor(
     quantity: int = Query(100)
 ):
 
-    # 1️ Convert location to lat/lon
+    # 1️⃣ Convert location to lat/lon
     lat, lon = get_lat_lon(location)
 
-    if not lat or not lon:
+    if lat is None or lon is None:
         return {"error": "Invalid location provided"}
 
-    # 2️ Fetch weather data
+    # 2️⃣ Fetch weather data
     df = fetch_weather_data(lat, lon)
 
-    # 3️ Fetch mandi data
+    # 3️⃣ Fetch mandi data
     mandi_data = get_mandi_data(state, commodity, market)
 
     if not mandi_data:
         return {"error": "No mandi data found for given inputs"}
 
-    # 4️ Run smart decision engine
+    # 4️⃣ Run smart decision engine
     final_result = smart_decision_engine(df, mandi_data, quantity)
 
-    # 5️ Add Farmer Friendly View (NEW)
-    friendly_output = farmer_friendly_view(final_result)
+    # ⭐ 5️⃣ Build Unified Risk Radar
+    radar_output = build_risk_radar(final_result)
 
+    # 6️⃣ Return unified response
     return {
         "location": location,
         "mandi_details": mandi_data,
         "analysis": final_result,
-        "farmer_view": friendly_output   # 👈 Added clean layer only
+        "risk_radar": radar_output
     }
+
