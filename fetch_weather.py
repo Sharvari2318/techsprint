@@ -59,3 +59,34 @@ else:
 
 print("\n🌾 HARVEST RECOMMENDATION:")
 print("👉", recommendation)
+
+
+# -------- SPOILAGE RISK CALCULATOR --------
+
+print("\n--- SPOILAGE RISK ANALYSIS ---")
+
+# Example Inputs (for demo)
+transit_hours = 8
+storage_type = "open"  # options: open / cold
+
+heat_factor = max_temp / 40  # normalize temperature
+
+storage_bonus = 0
+if storage_type == "cold":
+    storage_bonus = 1
+
+spoilage_score = (heat_factor * 0.5) + (transit_hours/24 * 0.3) - (storage_bonus * 0.2)
+
+# Convert to percentage
+spoilage_percent = spoilage_score * 100
+
+if spoilage_percent < 30:
+    risk = "🟢 Low"
+elif spoilage_percent < 60:
+    risk = "🟡 Medium"
+else:
+    risk = "🔴 High"
+
+print(f"Transit Hours: {transit_hours}")
+print(f"Storage Type: {storage_type}")
+print(f"Spoilage Risk: {risk} ({spoilage_percent:.2f}%)")
