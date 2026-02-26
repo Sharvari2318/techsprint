@@ -1,222 +1,315 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>AgriChain App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<title>AgriChain App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: #eef2f7;
-        }
+<style>
+body{
+margin:0;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+color:#333;
+}
 
-        .navbar {
-            height: 60px;
-            background: #2e7d32;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 25px;
-        }
+.navbar{
+height:60px;
+background:#0f2027;
+background:linear-gradient(to right,#0f2027,#203a43,#2c5364);
+color:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 25px;
+}
 
-        .app {
-            display: flex;
-        }
+.app{display:flex;}
 
-        .sidebar {
-            width: 220px;
-            background: white;
-            min-height: calc(100vh - 60px);
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            padding-top: 20px;
-        }
+.sidebar{
+width:220px;
+background:#ffffff;
+min-height:calc(100vh - 60px);
+box-shadow:2px 0 10px rgba(0,0,0,0.1);
+padding-top:20px;
+}
 
-        .sidebar button {
-            width: 100%;
-            padding: 12px 20px;
-            border: none;
-            background: none;
-            text-align: left;
-            cursor: pointer;
-        }
+.sidebar button{
+width:100%;
+padding:12px 20px;
+border:none;
+background:none;
+text-align:left;
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+}
 
-        .sidebar button:hover {
-            background: #f0f4f8;
-        }
+.sidebar button:hover{
+background:#e3f2fd;
+}
 
-        .content {
-            flex: 1;
-            padding: 30px;
-            max-width: 1000px;
-        }
+.content{
+flex:1;
+padding:30px;
+max-width:1000px;
+}
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-        }
+.card{
+background:white;
+padding:25px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
 
-        input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
+input,select{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:1px solid #ccc;
+}
 
-        button.primary {
-            background: #2e7d32;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+button.primary{
+background:linear-gradient(135deg,#00c853,#009624);
+color:white;
+border:none;
+padding:10px;
+border-radius:8px;
+margin-top:10px;
+cursor:pointer;
+font-weight:bold;
+transition:0.3s;
+}
 
-        .hidden {
-            display: none;
-        }
+button.primary:hover{
+transform:scale(1.05);
+}
 
-        .login-container {
-            max-width: 400px;
-            margin: 120px auto;
-        }
-    </style>
+.hidden{display:none;}
+
+.login-container{
+max-width:400px;
+margin:150px auto;
+background:white;
+border-radius:15px;
+box-shadow:0 15px 40px rgba(0,0,0,0.3);
+padding:30px;
+}
+
+.result-box{
+margin-top:15px;
+padding:15px;
+background:#f5f9ff;
+border-radius:10px;
+}
+
+.scenario-box{
+margin-top:12px;
+padding:12px;
+background:#f4f7f9;
+border-left:5px solid #009624;
+border-radius:8px;
+}
+
+.risk-badge{
+padding:4px 10px;
+border-radius:20px;
+color:white;
+font-weight:bold;
+}
+
+.low{background:#2ecc71;}
+.moderate{background:#f39c12;}
+.high{background:#e67e22;}
+.critical{background:#e74c3c;}
+</style>
 </head>
 
 <body>
 
-<!-- LOGIN PAGE -->
-<div id="loginPage" class="login-container card">
-    <h2>Login to AgriChain</h2>
-    <input id="username" placeholder="Username">
-    <input id="password" type="password" placeholder="Password">
-    <button class="primary" onclick="login()">Login</button>
+<!-- LOGIN -->
+<div id="loginPage" class="login-container">
+<h2>🌾 AgriChain Login</h2>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
+<button class="primary" onclick="login()">Login</button>
 </div>
 
 <!-- MAIN APP -->
 <div id="mainApp" class="hidden">
 
-    <div class="navbar">
-        <div>AgriChain</div>
-        <button onclick="logout()" style="background:none;color:white;border:none;cursor:pointer;">
-            Logout
-        </button>
-    </div>
+<div class="navbar">
+<div>🌾 AgriChain Dashboard</div>
+<button onclick="logout()" style="background:none;color:white;border:none;cursor:pointer;">Logout</button>
+</div>
 
-    <div class="app">
+<div class="app">
 
-        <div class="sidebar">
-            <button onclick="showSection('home')">Home</button>
-            <button onclick="showSection('advisor')">Smart Advisor</button>
-            <button onclick="showSection('harvest')">Harvest Planner</button>
-            <button onclick="showSection('spoilage')">Spoilage Risk</button>
-            <button onclick="showSection('contact')">Contact</button>
-        </div>
+<div class="sidebar">
+<button onclick="showSection('home')">Home</button>
+<button onclick="showSection('advisor')">Smart Advisor</button>
+<button onclick="showSection('harvest')">Harvest Planner</button>
+<button onclick="showSection('spoilage')">Spoilage Risk</button>
+<button onclick="showSection('contact')">Contact</button>
+</div>
 
-        <div class="content">
+<div class="content">
 
-            <div id="homeSection">
-                <div class="card">
-                    <h2>Welcome to AgriChain</h2>
-                    <p>Smart Agricultural Decision Support Platform.</p>
-                </div>
-            </div>
+<!-- HOME -->
+<div id="homeSection">
+<div class="card">
+<h2>Welcome to AgriChain</h2>
+<p>AI-powered Agricultural Intelligence Platform</p>
+</div>
+</div>
 
-            <div id="advisorSection" class="hidden">
-                <div class="card">
-                    <h2>Smart Market Advisor</h2>
-                    <input placeholder="State">
-                    <input placeholder="Commodity">
-                    <input placeholder="Market">
-                    <input placeholder="Location">
-                    <input placeholder="Quantity">
-                    <button class="primary">Analyze</button>
-                </div>
-            </div>
+<!-- SMART ADVISOR -->
+<div id="advisorSection" class="hidden">
+<div class="card">
+<h2>Smart Market Advisor</h2>
+<input id="state" placeholder="State">
+<input id="commodity" placeholder="Commodity">
+<input id="market" placeholder="Market">
+<input id="location" placeholder="Location">
+<input id="quantity" placeholder="Quantity">
+<button class="primary" onclick="runAdvisor()">Analyze</button>
 
-            <div id="harvestSection" class="hidden">
-                <div class="card">
-                    <h2>Harvest Planner</h2>
-                    <p>Harvest prediction module UI here.</p>
-                </div>
-            </div>
+<div id="advisorResult" class="result-box hidden">
+<p id="price"></p>
+<p id="trend"></p>
+<p id="recommendation"></p>
+</div>
 
-            <div id="spoilageSection" class="hidden">
-                <div class="card">
-                    <h2>Spoilage Risk Analysis</h2>
-                    <p>Spoilage risk module UI here.</p>
-                </div>
-            </div>
+<canvas id="radarChart" class="hidden"></canvas>
+</div>
+</div>
 
-            <div id="contactSection" class="hidden">
-                <div class="card">
-                    <h2>Contact Us</h2>
-                    <p>Email: support@agrichain.com</p>
-                </div>
-            </div>
+<!-- HARVEST -->
+<div id="harvestSection" class="hidden">
+<div class="card">
+<h2>Harvest Planner</h2>
+<button class="primary" onclick="runHarvest()">Predict</button>
+<p id="harvestOutput"></p>
+</div>
+</div>
 
-        </div>
-    </div>
+<!-- SPOILAGE -->
+<div id="spoilageSection" class="hidden">
+<div class="card">
+<h2>Spoilage Risk Analyzer</h2>
+<label>Select Maximum Temperature</label>
+<select id="maxTemp">
+<option value="25">25°C</option>
+<option value="30">30°C</option>
+<option value="35">35°C</option>
+<option value="40">40°C</option>
+</select>
+<button class="primary" onclick="runSpoilage()">Analyze Risk</button>
+<div id="spoilageResults" class="result-box hidden"></div>
+</div>
+
+<div class="card hidden" id="spoilageChartCard">
+<h3>Risk Comparison</h3>
+<canvas id="spoilageChart"></canvas>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contactSection" class="hidden">
+<div class="card">
+<h2>Contact Us</h2>
+<p>Email: support@agrichain.com</p>
+</div>
+</div>
+
+</div>
+</div>
 </div>
 
 <script>
 
-async function login() {
+let radarInstance=null;
+let spoilageChartInstance=null;
 
-    const username = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value.trim();
-
-    if (!username || !password) {
-        alert("Please enter username and password");
-        return;
-    }
-
-    try {
-        const response = await fetch("http://127.0.0.1:8000/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.detail || "Login failed");
-            return;
-        }
-
-        document.getElementById("loginPage").classList.add("hidden");
-        document.getElementById("mainApp").classList.remove("hidden");
-
-    } catch (error) {
-        alert("Backend not reachable. Make sure FastAPI is running.");
-    }
+function login(){
+const u=document.getElementById("username").value;
+const p=document.getElementById("password").value;
+if(!u||!p){alert("Enter username & password");return;}
+document.getElementById("loginPage").classList.add("hidden");
+document.getElementById("mainApp").classList.remove("hidden");
 }
 
-function logout() {
-    document.getElementById("mainApp").classList.add("hidden");
-    document.getElementById("loginPage").classList.remove("hidden");
+function logout(){
+document.getElementById("mainApp").classList.add("hidden");
+document.getElementById("loginPage").classList.remove("hidden");
 }
 
-function showSection(section) {
-    const sections = ["home","advisor","harvest","spoilage","contact"];
-    sections.forEach(s => {
-        document.getElementById(s + "Section").classList.add("hidden");
-    });
-    document.getElementById(section + "Section").classList.remove("hidden");
+function showSection(section){
+["home","advisor","harvest","spoilage","contact"].forEach(s=>{
+document.getElementById(s+"Section").classList.add("hidden");
+});
+document.getElementById(section+"Section").classList.remove("hidden");
+}
+
+async function runSpoilage(){
+try{
+const maxTemp=document.getElementById("maxTemp").value;
+const response=await fetch(`http://127.0.0.1:8000/spoilage-risk?max_temp=${maxTemp}`);
+if(!response.ok){alert("Backend Error");return;}
+const data=await response.json();
+
+const resultsDiv=document.getElementById("spoilageResults");
+resultsDiv.classList.remove("hidden");
+resultsDiv.innerHTML="";
+
+const labels=[];
+const values=[];
+
+data.scenarios.forEach(s=>{
+labels.push(s.scenario);
+values.push(s.percent);
+resultsDiv.innerHTML+=`
+<div class="scenario-box">
+<h4>${s.scenario}</h4>
+<p>Risk: <span class="risk-badge ${s.risk.toLowerCase()}">${s.risk}</span></p>
+<p>Spoilage: ${s.percent}%</p>
+<p>Estimated Loss: ₹${s.estimated_loss_rs}</p>
+</div>
+`;
+});
+
+document.getElementById("spoilageChartCard").classList.remove("hidden");
+
+if(spoilageChartInstance)spoilageChartInstance.destroy();
+
+spoilageChartInstance=new Chart(
+document.getElementById("spoilageChart"),
+{
+type:"bar",
+data:{
+labels:labels,
+datasets:[{
+label:"Spoilage %",
+data:values,
+backgroundColor:["#ff6b6b","#4ecdc4","#ffa94d"]
+}]
+}
+}
+);
+
+}catch(e){
+alert("Spoilage API failed.");
+}
+}
+
+function runHarvest(){
+document.getElementById("harvestOutput").innerText=
+"Harvest module ready for next integration.";
 }
 
 </script>
-
 </body>
 </html>

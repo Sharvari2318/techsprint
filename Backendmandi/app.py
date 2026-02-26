@@ -4,13 +4,17 @@ import requests
 
 from Backendmandi.modules.weather import fetch_weather_data
 from Backendmandi.modules.decision import smart_decision_engine
-from Backendmandi.modules.risk_radar import build_risk_radar   # ⭐ NEW
+from Backendmandi.modules.risk_radar import build_risk_radar
+from Backendmandi.modules.spoilage import spoilage_simulation
+from Backendmandi.modules.harvest import harvest_recommendation
 from Backendmandi.mandi_api import get_mandi_data
+
 
 # -----------------------------
 # Create FastAPI App
 # -----------------------------
 app = FastAPI()
+
 
 # -----------------------------
 # Enable CORS
@@ -22,6 +26,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # -----------------------------------
 # Convert location → latitude & longitude
@@ -81,28 +86,28 @@ def smart_advisor(
     quantity: int = Query(100)
 ):
 
-    # 1️ Convert location to lat/lon
+    #  Convert location to lat/lon
     lat, lon = get_lat_lon(location)
 
     if lat is None or lon is None:
         return {"error": "Invalid location provided"}
 
-    # 2️ Fetch weather data
+    #  Fetch weather data
     df = fetch_weather_data(lat, lon)
 
-    # 3️Fetch mandi data
+    #  Fetch mandi data
     mandi_data = get_mandi_data(state, commodity, market)
 
     if not mandi_data:
         return {"error": "No mandi data found for given inputs"}
 
-    # 4️ Run smart decision engine
+    #  Run decision engine
     final_result = smart_decision_engine(df, mandi_data, quantity)
 
-    #   Build Unified Risk Radar
+    #  Build unified risk radar
     radar_output = build_risk_radar(final_result)
 
-    # 6️ Return unified response
+    #  Return response
     return {
         "location": location,
         "mandi_details": mandi_data,
@@ -110,3 +115,34 @@ def smart_advisor(
         "risk_radar": radar_output
     }
 
+
+# -----------------------------------
+# Spoilage Risk API
+# -----------------------------------
+@app.get("/spoilage-risk")
+def spoilage_risk(max_temp: float = Query(...)):
+
+    result = spoilage_simulation(max_temp)
+
+    return result
+
+
+# -----------------------------------
+# Harvest Recommendation API
+# -----------------------------------
+@app.get("/harvest-recommendation")
+def harvest_recommend(location: str = Query(...)):
+
+    # Convert location to lat/lon
+    lat, lon = get_lat_lon(location)
+
+    if lat is None or lon is None:
+        return {"error": "Invalid location provided"}
+
+    # Fetch weather forecast dataframe
+    df = fetch_weather_data(lat, lon)
+
+    # Run harvest recommendation logic
+    result = harvest_recommendation(df)
+
+    return result
