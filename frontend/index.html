@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AgriChain Smart Advisor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <h2>🌾 AgriChain Advisor</h2>
+
+    <input id="state" placeholder="State"><br><br>
+    <input id="commodity" placeholder="Commodity"><br><br>
+    <input id="market" placeholder="Market"><br><br>
+    <input id="location" placeholder="Location"><br><br>
+    <input id="quantity" placeholder="Quantity"><br><br>
+
+    <button onclick="getAdvice()">Get Advice</button>
+
+    <pre id="result"></pre>
+
+    <script>
+        async function getAdvice() {
+            const state = document.getElementById("state").value;
+            const commodity = document.getElementById("commodity").value;
+            const market = document.getElementById("market").value;
+            const location = document.getElementById("location").value;
+            const quantity = document.getElementById("quantity").value;
+
+            const response = await fetch(
+                `http://127.0.0.1:8000/smart-advisor?state=${state}&commodity=${commodity}&market=${market}&location=${location}&quantity=${quantity}`
+            );
+
+            const data = await response.json();
+            document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js');
+        }
+    </script>
+</body>
+</html>
