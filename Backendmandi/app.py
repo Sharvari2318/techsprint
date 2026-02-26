@@ -81,28 +81,28 @@ def smart_advisor(
     quantity: int = Query(100)
 ):
 
-    # 1️⃣ Convert location to lat/lon
+    # 1️ Convert location to lat/lon
     lat, lon = get_lat_lon(location)
 
     if lat is None or lon is None:
         return {"error": "Invalid location provided"}
 
-    # 2️⃣ Fetch weather data
+    # 2️ Fetch weather data
     df = fetch_weather_data(lat, lon)
 
-    # 3️⃣ Fetch mandi data
+    # 3️Fetch mandi data
     mandi_data = get_mandi_data(state, commodity, market)
 
     if not mandi_data:
         return {"error": "No mandi data found for given inputs"}
 
-    # 4️⃣ Run smart decision engine
+    # 4️ Run smart decision engine
     final_result = smart_decision_engine(df, mandi_data, quantity)
 
-    # ⭐ 5️⃣ Build Unified Risk Radar
+    #   Build Unified Risk Radar
     radar_output = build_risk_radar(final_result)
 
-    # 6️⃣ Return unified response
+    # 6️ Return unified response
     return {
         "location": location,
         "mandi_details": mandi_data,
