@@ -21,7 +21,7 @@ def generate_explanation(max_temp, transit_hours, storage_type):
         reasons.append("High temperature increases spoilage risk")
 
     if transit_hours > 10:
-        reasons.append("Long transit duration raises spoilage chances")
+        reasons.append("Long transit duration  raises spoilage chances")
 
     if storage_type == "open":
         reasons.append("Open storage exposes crop to environmental heat")
