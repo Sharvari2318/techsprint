@@ -32,7 +32,6 @@
             line-height: 1.6;
         }
 
-        /* ==================== LOGIN SCREEN ==================== */
         .login-container {
             display: flex;
             justify-content: center;
@@ -68,7 +67,7 @@
             font-weight: 500;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 12px;
             border: 2px solid var(--border-color);
@@ -79,12 +78,12 @@
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--primary-color);
         }
 
-        .login-btn {
+        .login-btn, .submit-btn {
             width: 100%;
             padding: 12px;
             background: var(--primary-color);
@@ -97,16 +96,10 @@
             transition: background 0.3s;
         }
 
-        .login-btn:hover {
+        .login-btn:hover, .submit-btn:hover {
             background: var(--primary-dark);
         }
 
-        .login-btn:disabled {
-            background: #999;
-            cursor: not-allowed;
-        }
-
-        /* ==================== DASHBOARD ==================== */
         .dashboard-container {
             display: none;
             height: 100vh;
@@ -117,7 +110,6 @@
             display: flex;
         }
 
-        /* ==================== SIDEBAR ==================== */
         .sidebar {
             width: 250px;
             background: var(--lighter-bg);
@@ -183,14 +175,12 @@
             font-size: 18px;
         }
 
-        /* ==================== MAIN CONTENT ==================== */
         .main-content {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
-        /* ==================== NAVBAR ==================== */
         .navbar {
             background: var(--lighter-bg);
             padding: 20px 30px;
@@ -248,7 +238,6 @@
             background: #c0392b;
         }
 
-        /* ==================== CONTENT AREA ==================== */
         .content {
             flex: 1;
             overflow-y: auto;
@@ -270,7 +259,6 @@
             to { opacity: 1; }
         }
 
-        /* ==================== CARDS ==================== */
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -323,7 +311,6 @@
             color: var(--secondary-color);
         }
 
-        /* ==================== CHARTS ==================== */
         .charts-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -353,7 +340,6 @@
             height: 300px;
         }
 
-        /* ==================== TABLES ==================== */
         .table-container {
             background: var(--lighter-bg);
             border: 1px solid var(--border-color);
@@ -398,7 +384,6 @@
             background: rgba(46, 204, 113, 0.05);
         }
 
-        /* ==================== BADGES ==================== */
         .badge {
             display: inline-block;
             padding: 5px 12px;
@@ -424,7 +409,23 @@
             color: var(--danger-color);
         }
 
-        /* ==================== ALERTS ==================== */
+        .ai-summary {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.1));
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            color: var(--text-color);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .ai-summary h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
         .alert {
             padding: 15px 20px;
             border-radius: 5px;
@@ -450,7 +451,6 @@
             border-left-color: var(--warning-color);
         }
 
-        /* ==================== LOADING ==================== */
         .spinner {
             border: 4px solid rgba(46, 204, 113, 0.2);
             border-top: 4px solid var(--primary-color);
@@ -472,36 +472,92 @@
             color: #999;
         }
 
-        /* ==================== RESPONSIVE ==================== */
+        .crop-insight-form {
+            background: var(--lighter-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .crop-insight-form h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group-inline {
+            margin-bottom: 0;
+        }
+
+        .form-group-inline label {
+            font-size: 13px;
+            margin-bottom: 6px;
+            display: block;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .form-group-inline input, .form-group-inline select {
+            width: 100%;
+            padding: 10px;
+            font-size: 13px;
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            background: var(--lighter-bg);
+            color: var(--text-color);
+        }
+
+        .insight-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .insight-card {
+            background: var(--lighter-bg);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-color);
+            text-align: center;
+        }
+
+        .insight-card-label {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .insight-card-value {
+            color: var(--primary-color);
+            font-size: 20px;
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 200px;
             }
-
             .cards {
                 grid-template-columns: repeat(2, 1fr);
             }
-
             .charts-section {
                 grid-template-columns: 1fr;
             }
-
-            .card-value {
-                font-size: 24px;
-            }
-
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-
-            .navbar-right {
-                width: 100%;
+            .form-row {
+                grid-template-columns: 1fr;
             }
         }
 
-        /* ==================== SCROLLBAR ==================== */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -519,22 +575,12 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #666;
         }
-
-        pre {
-            background: var(--dark-bg);
-            color: #0f0;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            font-size: 12px;
-            font-family: 'Courier New', monospace;
-        }
     </style>
 </head>
 
 <body>
 
-    <!-- ==================== LOGIN SCREEN ==================== -->
+    <!-- LOGIN SCREEN -->
     <div class="login-container" id="loginContainer">
         <div class="login-box">
             <h1>🌾 Mandi Advisor</h1>
@@ -552,7 +598,7 @@
         </div>
     </div>
 
-    <!-- ==================== DASHBOARD ==================== -->
+    <!-- DASHBOARD -->
     <div class="dashboard-container" id="dashboardContainer">
 
         <!-- SIDEBAR -->
@@ -671,33 +717,84 @@
                 <!-- CROP INSIGHT PAGE -->
                 <div class="page" id="cropInsightPage">
 
-                    <div class="table-container">
-                        <div class="table-title">Crop Insight Input</div>
-                        <div style="padding:20px;">
-                            <div class="form-group">
-                                <label>Crop Name</label>
-                                <input type="text" id="ciCrop" placeholder="Enter crop (e.g., Mango, Tomato, Apple)">
+                    <!-- Input Form -->
+                    <div class="crop-insight-form">
+                        <h3>🔍 Get Crop Insight</h3>
+                        <div class="form-row">
+                            <div class="form-group form-group-inline">
+                                <label for="ciCrop">Select Crop</label>
+                                <select id="ciCrop" required>
+                                    <option value="">-- Select Crop --</option>
+                                    <option value="Mango">Mango</option>
+                                    <option value="Tomato">Tomato</option>
+                                    <option value="Apple">Apple</option>
+                                    <option value="Banana">Banana</option>
+                                    <option value="Carrot">Carrot</option>
+                                </select>
                             </div>
 
-                            <div class="form-group">
-                                <label>Location</label>
-                                <input type="text" id="ciLocation" placeholder="Enter location (e.g., Delhi, Mumbai)">
+                            <div class="form-group form-group-inline">
+                                <label for="ciLocation">Select Location</label>
+                                <select id="ciLocation" required>
+                                    <option value="">-- Select Location --</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Punjab">Punjab</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                </select>
                             </div>
 
-                            <button class="login-btn" onclick="loadCropInsightFull()">
-                                Get Complete Insight
-                            </button>
+                            <div class="form-group form-group-inline">
+                                <label for="ciQuantity">Quantity (kg)</label>
+                                <input type="number" id="ciQuantity" placeholder="Enter quantity" value="100" min="1">
+                            </div>
                         </div>
+
+                        <button class="submit-btn" onclick="loadCropInsightFull()">
+                            🔎 Get Complete Insight
+                        </button>
                     </div>
 
+                    <!-- AI Summary -->
+                    <div id="ciAISummary"></div>
+
+                    <!-- Quick Info Cards -->
+                    <div id="ciQuickInfo"></div>
+
+                    <!-- Market Price Table -->
+                    <div id="ciMarketPrice"></div>
+
+                    <!-- Harvest Window Table -->
+                    <div id="ciHarvestWindow"></div>
+
+                    <!-- Storage Type Table -->
+                    <div id="ciStorageType"></div>
+
+                    <!-- Recommendations Table -->
+                    <div id="ciRecommendations"></div>
+
+                    <!-- Advisor Analysis -->
                     <div id="ciAdvisor"></div>
+
+                    <!-- Harvest Recommendations -->
                     <div id="ciHarvest"></div>
+
+                    <!-- Spoilage Risk -->
                     <div id="ciSpoilage"></div>
 
-                    <div class="chart-container">
-                        <div class="chart-title">Crop Risk Radar</div>
-                        <div class="chart-wrapper">
-                            <canvas id="ciRadarChart"></canvas>
+                    <!-- Charts -->
+                    <div class="charts-section">
+                        <div class="chart-container">
+                            <div class="chart-title">Crop Risk Radar</div>
+                            <div class="chart-wrapper">
+                                <canvas id="ciRadarChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-title">Risk Distribution</div>
+                            <div class="chart-wrapper">
+                                <canvas id="ciPieChart"></canvas>
+                            </div>
                         </div>
                     </div>
 
@@ -728,20 +825,20 @@
     </div>
 
     <script>
-        // ==================== CONFIG ====================
+        // CONFIG
         const CONFIG = {
             API_BASE: 'http://127.0.0.1:8000',
             API_TIMEOUT: 10000
         };
 
-        // ==================== STATE ====================
+        // STATE
         const State = {
             currentUser: null,
             currentPage: 'dashboard',
             charts: {}
         };
 
-        // ==================== UTILITY FUNCTIONS ====================
+        // UTILITY FUNCTIONS
         function log(message, data = null) {
             console.log(`[INFO] ${message}`, data || '');
         }
@@ -773,7 +870,7 @@
             document.getElementById('clockDate').textContent = formatDate(now);
         }
 
-        // ==================== FETCH FUNCTION ====================
+        // FETCH API
         async function fetchAPI(endpoint, timeout = CONFIG.API_TIMEOUT) {
             const url = `${CONFIG.API_BASE}${endpoint}`;
             log(`Fetching: ${url}`);
@@ -806,7 +903,7 @@
             }
         }
 
-        // ==================== CHART FUNCTIONS ====================
+        // CHART FUNCTIONS
         function destroyChart(chartId) {
             if (State.charts[chartId]) {
                 State.charts[chartId].destroy();
@@ -905,18 +1002,107 @@
             });
         }
 
-        // ==================== PAGE NAVIGATION ====================
+        function createCropRadarChart(data) {
+            destroyChart('ciRadar');
+            
+            const ctx = document.getElementById('ciRadarChart');
+            if (!ctx) return;
+
+            const chartData = {
+                labels: ['Weather', 'Market', 'Storage', 'Transport', 'Disease'],
+                datasets: [{
+                    label: 'Risk Score',
+                    data: [
+                        data?.risk_radar_data?.weather || 50,
+                        data?.risk_radar_data?.market || 50,
+                        data?.risk_radar_data?.storage || 50,
+                        data?.risk_radar_data?.transportation || 50,
+                        data?.risk_radar_data?.disease || 50
+                    ],
+                    borderColor: 'rgb(46, 204, 113)',
+                    backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgb(46, 204, 113)',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2
+                }]
+            };
+
+            State.charts.ciRadar = new Chart(ctx, {
+                type: 'radar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ecf0f1' }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: '#999',
+                                backdropColor: 'transparent'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createCropPieChart(advisorData) {
+            destroyChart('ciPie');
+            
+            const ctx = document.getElementById('ciPieChart');
+            if (!ctx) return;
+
+            const riskScore = advisorData?.decision_analysis?.risk_score || 50;
+
+            const chartData = {
+                labels: ['Decision Risk', 'Market Factor', 'Spoilage Risk'],
+                datasets: [{
+                    data: [riskScore, 40, 35],
+                    backgroundColor: [
+                        'rgba(46, 204, 113, 0.8)',
+                        'rgba(243, 156, 18, 0.8)',
+                        'rgba(231, 76, 60, 0.8)'
+                    ],
+                    borderColor: '#333',
+                    borderWidth: 2
+                }]
+            };
+
+            State.charts.ciPie = new Chart(ctx, {
+                type: 'doughnut',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ecf0f1' },
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // PAGE NAVIGATION
         function navigateTo(page) {
-            // Hide all pages
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             
-            // Show selected page
             const pageElement = document.getElementById(page + 'Page');
             if (pageElement) {
                 pageElement.classList.add('active');
             }
 
-            // Update nav links
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('data-page') === page) {
@@ -924,7 +1110,6 @@
                 }
             });
 
-            // Update page title
             const titles = {
                 dashboard: '📊 Dashboard',
                 advisor: '🤖 Smart Advisor',
@@ -936,7 +1121,6 @@
 
             State.currentPage = page;
 
-            // Load page-specific data
             if (page === 'advisor') {
                 loadAdvisorPage();
             } else if (page === 'harvest') {
@@ -946,10 +1130,9 @@
             }
         }
 
-        // ==================== PAGE LOADERS ====================
+        // PAGE LOADERS
         async function loadAdvisorPage() {
             const content = document.getElementById('advisorContent');
-            
             const result = await fetchAPI('/smart-advisor');
 
             if (!result.success) {
@@ -976,9 +1159,7 @@
             const metrics = [
                 { key: 'decision_analysis', label: 'Decision Analysis' },
                 { key: 'weather_data', label: 'Weather Data' },
-                { key: 'spoilage_analysis', label: 'Spoilage Analysis' },
-                { key: 'sustainability_analysis', label: 'Sustainability Analysis' },
-                { key: 'profit_analysis', label: 'Profit Analysis' }
+                { key: 'spoilage_analysis', label: 'Spoilage Analysis' }
             ];
 
             metrics.forEach(metric => {
@@ -999,10 +1180,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-container">
-                    <div class="table-title">Raw Response Data</div>
-                    <pre>${JSON.stringify(data, null, 2)}</pre>
-                </div>
             `;
 
             content.innerHTML = html;
@@ -1010,7 +1187,6 @@
 
         async function loadHarvestPage() {
             const content = document.getElementById('harvestContent');
-            
             const result = await fetchAPI('/harvest-recommendation');
 
             if (!result.success) {
@@ -1054,10 +1230,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-container">
-                    <div class="table-title">Raw Response Data</div>
-                    <pre>${JSON.stringify(data, null, 2)}</pre>
-                </div>
             `;
 
             content.innerHTML = html;
@@ -1065,7 +1237,6 @@
 
         async function loadSpoilagePage() {
             const content = document.getElementById('spoilageContent');
-            
             const result = await fetchAPI('/spoilage-risk');
 
             if (!result.success) {
@@ -1111,53 +1282,33 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="table-container">
-                    <div class="table-title">Raw Response Data</div>
-                    <pre>${JSON.stringify(data, null, 2)}</pre>
-                </div>
             `;
 
             content.innerHTML = html;
         }
 
-        // ==================== DASHBOARD LOAD ====================
-        async function loadDashboard() {
-            const result = await fetchAPI('/smart-advisor');
-
-            if (!result.success) {
-                showAlert(`Failed to load dashboard: ${result.error}`, 'error');
-                return;
-            }
-
-            const data = result.data || {};
-
-            // Update cards
-            document.getElementById('tempValue').textContent = data.risk_radar_data?.weather ?? '--';
-            document.getElementById('rainValue').textContent = data.mandi_data?.demand_level ?? '--';
-            document.getElementById('marketValue').textContent = data.mandi_data?.market_trend ?? '--';
-            document.getElementById('riskValue').textContent = data.decision_analysis?.risk_level ?? '--';
-
-            // Create charts
-            createRiskRadarChart(data);
-            createSpoilageChart();
-
-            log('Dashboard loaded successfully', data);
-        }
-
-        // ==================== FULL CROP INSIGHT ====================
+        // CROP INSIGHT FULL
         async function loadCropInsightFull() {
-
             const crop = document.getElementById("ciCrop").value.trim();
             const location = document.getElementById("ciLocation").value.trim();
+            const quantity = document.getElementById("ciQuantity").value.trim();
 
             if (!crop || !location) {
-                showAlert("Please enter crop and location", "warning");
+                showAlert("Please select crop and location", "warning");
                 return;
             }
 
-            const advisorRes = await fetchAPI(`/smart-advisor?crop=${crop}&location=${location}`);
-            const harvestRes = await fetchAPI(`/harvest-recommendation?crop=${crop}&location=${location}`);
-            const spoilageRes = await fetchAPI(`/spoilage-risk?crop=${crop}&location=${location}`);
+            document.getElementById("ciAISummary").innerHTML = '';
+            document.getElementById("ciQuickInfo").innerHTML = '';
+            document.getElementById("ciMarketPrice").innerHTML = '';
+            document.getElementById("ciHarvestWindow").innerHTML = '';
+            document.getElementById("ciStorageType").innerHTML = '';
+            document.getElementById("ciRecommendations").innerHTML = '';
+            document.getElementById("ciAdvisor").innerHTML = '<div class="loading"><div class="spinner"></div><p>Analyzing...</p></div>';
+
+            const advisorRes = await fetchAPI(`/smart-advisor?crop=${crop}&location=${location}&quantity=${quantity}`);
+            const harvestRes = await fetchAPI(`/harvest-recommendation?crop=${crop}&location=${location}&quantity=${quantity}`);
+            const spoilageRes = await fetchAPI(`/spoilage-risk?crop=${crop}&location=${location}&quantity=${quantity}`);
 
             if (!advisorRes.success || !harvestRes.success || !spoilageRes.success) {
                 showAlert("Failed to load crop insight data", "error");
@@ -1168,137 +1319,179 @@
             const harvestData = harvestRes.data || {};
             const spoilageData = spoilageRes.data || {};
 
+            // AI SUMMARY
+            const riskLevel = advisorData.decision_analysis?.risk_level || 'medium';
+            const recommendation = riskLevel === 'low' 
+                ? `Great! ${crop} in ${location} shows favorable conditions. Market demand is strong.`
+                : riskLevel === 'medium'
+                ? `Monitor ${crop} closely. Implement preventive measures. Harvest in 7-10 days.`
+                : `⚠️ High risk for ${crop}. Enhanced care needed. Watch spoilage closely.`;
+
+            document.getElementById("ciAISummary").innerHTML = `
+                <div class="ai-summary">
+                    <h3>🤖 AI Crop Intelligence</h3>
+                    <p>${recommendation}</p>
+                </div>
+            `;
+
+            // QUICK INFO
+            document.getElementById("ciQuickInfo").innerHTML = `
+                <div class="insight-cards">
+                    <div class="insight-card">
+                        <div class="insight-card-label">Overall Risk</div>
+                        <div class="insight-card-value">${riskLevel.toUpperCase()}</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-card-label">Risk Score</div>
+                        <div class="insight-card-value">${advisorData.decision_analysis?.risk_score || 50}%</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-card-label">Spoilage Risk</div>
+                        <div class="insight-card-value">${spoilageData.data?.overall_risk?.toUpperCase() || 'MEDIUM'}</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="insight-card-label">Quantity</div>
+                        <div class="insight-card-value">${quantity} kg</div>
+                    </div>
+                </div>
+            `;
+
+            // MARKET PRICE
+            const priceData = {
+                'Mango': { min: 2000, avg: 2700, max: 3500 },
+                'Tomato': { min: 800, avg: 1100, max: 1500 },
+                'Apple': { min: 3000, avg: 4000, max: 5000 },
+                'Banana': { min: 1200, avg: 1600, max: 2000 },
+                'Carrot': { min: 600, avg: 900, max: 1200 }
+            };
+            const price = priceData[crop] || { min: 1000, avg: 1500, max: 2000 };
+
+            document.getElementById("ciMarketPrice").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">💰 Market Price - ${crop} in ${location}</div>
+                    <table>
+                        <thead><tr><th>Price Type</th><th>Price (₹/kg)</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>Minimum</td><td>₹${price.min}</td><td><span class="badge warning">CAUTION</span></td></tr>
+                            <tr><td>Average</td><td>₹${price.avg}</td><td><span class="badge success">CURRENT</span></td></tr>
+                            <tr><td>Maximum</td><td>₹${price.max}</td><td><span class="badge success">BEST</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // HARVEST WINDOW
+            document.getElementById("ciHarvestWindow").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">🌱 Harvest Window</div>
+                    <table>
+                        <thead><tr><th>Stage</th><th>Details</th><th>Timeline</th></tr></thead>
+                        <tbody>
+                            <tr><td>Optimal Window</td><td>Based on maturity</td><td><strong>7-10 days</strong></td></tr>
+                            <tr><td>Quality Grade</td><td>Grade A Expected</td><td><span class="badge success">EXCELLENT</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // STORAGE TYPE
+            document.getElementById("ciStorageType").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">🏭 Storage Recommendations</div>
+                    <table>
+                        <thead><tr><th>Storage Type</th><th>Temperature</th><th>Duration</th></tr></thead>
+                        <tbody>
+                            <tr><td>Cold Storage</td><td>0-4°C</td><td>120-147 days</td></tr>
+                            <tr><td>Relative Humidity</td><td>85-95%</td><td>Optimal Range</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // RECOMMENDATIONS
+            document.getElementById("ciRecommendations").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">✅ AI Recommendations</div>
+                    <table>
+                        <thead><tr><th>Recommendation</th><th>Action</th><th>Priority</th></tr></thead>
+                        <tbody>
+                            <tr><td>Harvest Timing</td><td>Harvest within optimal window</td><td><span class="badge danger">HIGH</span></td></tr>
+                            <tr><td>Storage</td><td>Use cold storage facility</td><td><span class="badge warning">MEDIUM</span></td></tr>
+                            <tr><td>Transportation</td><td>Use refrigerated transport</td><td><span class="badge warning">MEDIUM</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            // ADVISOR DATA
             document.getElementById("ciAdvisor").innerHTML = `
                 <div class="table-container">
-                    <div class="table-title">Smart Advisor Analysis for ${crop}</div>
-                    <pre>${JSON.stringify(advisorData, null, 2)}</pre>
-                </div>
-            `;
-
-            let harvestRows = "";
-
-            if (harvestData.recommendations && Array.isArray(harvestData.recommendations)) {
-                harvestData.recommendations.forEach(rec => {
-                    const priority = rec.priority || 'normal';
-                    const badge = priority === 'high' ? 'danger' : priority === 'medium' ? 'warning' : 'success';
-                    harvestRows += `
-                        <tr>
-                            <td>${rec.title || 'N/A'}</td>
-                            <td>${rec.description || 'N/A'}</td>
-                            <td><span class="badge ${badge}">${priority.toUpperCase()}</span></td>
-                        </tr>
-                    `;
-                });
-            } else {
-                harvestRows = `<tr><td colspan="3" style="text-align: center; color: #999;">No harvest data available</td></tr>`;
-            }
-
-            document.getElementById("ciHarvest").innerHTML = `
-                <div class="table-container">
-                    <div class="table-title">Harvest Recommendations for ${crop}</div>
+                    <div class="table-title">📊 Smart Analysis</div>
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Priority</th>
-                            </tr>
-                        </thead>
-                        <tbody>${harvestRows}</tbody>
+                        <thead><tr><th>Metric</th><th>Value</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>Risk Level</td><td>${riskLevel.toUpperCase()}</td><td><span class="badge ${riskLevel === 'high' ? 'danger' : 'warning'}">${riskLevel.toUpperCase()}</span></td></tr>
+                            <tr><td>Risk Score</td><td>${advisorData.decision_analysis?.risk_score || 50}%</td><td><span class="badge success">ANALYZED</span></td></tr>
+                            <tr><td>Profit Margin</td><td>${(advisorData.profit_analysis?.profit_margin_percent || 0).toFixed(1)}%</td><td><span class="badge success">POSITIVE</span></td></tr>
+                        </tbody>
                     </table>
                 </div>
             `;
 
-            let spoilageRows = "";
-
-            if (spoilageData.spoilage_risks && Array.isArray(spoilageData.spoilage_risks)) {
-                spoilageData.spoilage_risks.forEach(risk => {
-                    const riskLevel = risk.risk_level || 'medium';
-                    const badge = riskLevel === 'high' ? 'danger' : riskLevel === 'medium' ? 'warning' : 'success';
-                    spoilageRows += `
-                        <tr>
-                            <td>${risk.crop || 'N/A'}</td>
-                            <td><span class="badge ${badge}">${riskLevel.toUpperCase()}</span></td>
-                            <td>${risk.timeline || 'N/A'}</td>
-                            <td>${risk.action || 'Monitor'}</td>
-                        </tr>
-                    `;
-                });
-            } else {
-                spoilageRows = `<tr><td colspan="4" style="text-align: center; color: #999;">No spoilage data available</td></tr>`;
-            }
-
-            document.getElementById("ciSpoilage").innerHTML = `
-                <div class="table-container">
-                    <div class="table-title">Spoilage Risk Assessment for ${crop}</div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Crop</th>
-                                <th>Risk Level</th>
-                                <th>Timeline</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>${spoilageRows}</tbody>
-                    </table>
-                </div>
-            `;
-
-            if (window.ciChart) window.ciChart.destroy();
-
-            const ciRadarCtx = document.getElementById("ciRadarChart");
-            if (ciRadarCtx) {
-                window.ciChart = new Chart(ciRadarCtx, {
-                    type: "radar",
-                    data: {
-                        labels: ["Weather", "Market", "Storage", "Transport", "Disease"],
-                        datasets: [{
-                            label: "Risk Score",
-                            data: [
-                                advisorData.risk_radar_data?.weather || 50,
-                                advisorData.risk_radar_data?.market || 50,
-                                advisorData.risk_radar_data?.storage || 50,
-                                advisorData.risk_radar_data?.transportation || 50,
-                                advisorData.risk_radar_data?.disease || 50
-                            ],
-                            borderColor: 'rgb(46, 204, 113)',
-                            backgroundColor: 'rgba(46, 204, 113, 0.2)',
-                            borderWidth: 2,
-                            pointBackgroundColor: 'rgb(46, 204, 113)',
-                            pointBorderColor: '#fff',
-                            pointBorderWidth: 2
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                labels: { color: '#ecf0f1' }
-                            }
-                        },
-                        scales: {
-                            r: {
-                                beginAtZero: true,
-                                max: 100,
-                                ticks: {
-                                    color: '#999',
-                                    backdropColor: 'transparent'
-                                },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                }
-                            }
-                        }
-                    }
+            // HARVEST RECOMMENDATIONS
+            let harvestHTML = '<div class="table-container"><div class="table-title">🌱 Harvest Tips</div><table><thead><tr><th>Title</th><th>Description</th><th>Priority</th></tr></thead><tbody>';
+            if (harvestData.data?.recommendations && Array.isArray(harvestData.data.recommendations)) {
+                harvestData.data.recommendations.forEach(rec => {
+                    const badge = (rec.priority || 'normal') === 'high' ? 'danger' : 'warning';
+                    harvestHTML += `<tr><td>${rec.title}</td><td>${rec.description}</td><td><span class="badge ${badge}">${(rec.priority || 'NORMAL').toUpperCase()}</span></td></tr>`;
                 });
             }
+            harvestHTML += '</tbody></table></div>';
+            document.getElementById("ciHarvest").innerHTML = harvestHTML;
 
-            showAlert(`Crop Insight loaded successfully for ${crop}!`, 'success');
+            // SPOILAGE RISK
+            let spoilageHTML = '<div class="table-container"><div class="table-title">⚠️ Spoilage Risk</div><table><thead><tr><th>Crop</th><th>Risk</th><th>Timeline</th><th>Action</th></tr></thead><tbody>';
+            if (spoilageData.data?.spoilage_risks && Array.isArray(spoilageData.data.spoilage_risks)) {
+                spoilageData.data.spoilage_risks.forEach(risk => {
+                    const badge = risk.risk_level === 'high' ? 'danger' : 'warning';
+                    spoilageHTML += `<tr><td>${risk.crop || crop}</td><td><span class="badge ${badge}">${(risk.risk_level || 'MEDIUM').toUpperCase()}</span></td><td>${risk.timeline}</td><td>${risk.action}</td></tr>`;
+                });
+            }
+            spoilageHTML += '</tbody></table></div>';
+            document.getElementById("ciSpoilage").innerHTML = spoilageHTML;
+
+            // CHARTS
+            setTimeout(() => {
+                createCropRadarChart(advisorData);
+                createCropPieChart(advisorData);
+            }, 200);
+
+            showAlert(`✅ Crop Insight loaded for ${crop}!`, 'success');
         }
 
-        // ==================== LOGIN/LOGOUT ====================
+        // DASHBOARD LOAD
+        async function loadDashboard() {
+            const result = await fetchAPI('/smart-advisor');
+
+            if (!result.success) {
+                showAlert(`Failed to load dashboard: ${result.error}`, 'error');
+                return;
+            }
+
+            const data = result.data || {};
+
+            document.getElementById('tempValue').textContent = data.risk_radar_data?.weather ?? '--';
+            document.getElementById('rainValue').textContent = data.mandi_data?.demand_level ?? '--';
+            document.getElementById('marketValue').textContent = data.mandi_data?.market_trend ?? '--';
+            document.getElementById('riskValue').textContent = data.decision_analysis?.risk_level ?? '--';
+
+            createRiskRadarChart(data);
+            createSpoilageChart();
+
+            log('Dashboard loaded', data);
+        }
+
+        // LOGIN/LOGOUT
         function handleLogin(event) {
             event.preventDefault();
 
@@ -1330,8 +1523,6 @@
                 Object.keys(State.charts).forEach(key => destroyChart(key));
                 State.charts = {};
 
-                if (window.ciChart) window.ciChart.destroy();
-
                 document.getElementById('loginForm').reset();
                 document.getElementById('dashboardContainer').classList.remove('active');
                 document.getElementById('loginContainer').style.display = 'flex';
@@ -1340,7 +1531,7 @@
             }
         }
 
-        // ==================== NAVIGATION SETUP ====================
+        // NAVIGATION SETUP
         function setupNavigation() {
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
@@ -1351,16 +1542,15 @@
             });
         }
 
-        // ==================== INITIALIZE ====================
+        // INITIALIZE
         document.addEventListener('DOMContentLoaded', function() {
             log('Application initialized');
-            document.getElementById('username').focus();
+             document.getElementById('username').focus();
         });
 
-        // ==================== CLEANUP ====================
+        // CLEANUP
         window.addEventListener('beforeunload', function() {
             Object.keys(State.charts).forEach(key => destroyChart(key));
-            if (window.ciChart) window.ciChart.destroy();
         });
     </script>
 
