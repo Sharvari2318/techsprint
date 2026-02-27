@@ -1,69 +1,48 @@
-def smart_decision_engine(df, mandi_data, quantity):
+"""Smart decision engine module"""
 
-    # -----------------------------
-    # 1️⃣ Weather Analysis
-    # -----------------------------
-    max_temp = df["temperature_2m"].max()
-    avg_temp = df["temperature_2m"].mean()
-    max_rain = df["precipitation_mm"].max()
-
-    # Risk score calculation
-    if max_temp > 35 or max_rain > 5:
-        risk_score = "High"
-    elif max_temp > 30:
-        risk_score = "Medium"
-    else:
-        risk_score = "Low"
-
-    # -----------------------------
-    # 2️⃣ Mandi Price Analysis
-    # -----------------------------
-    latest_price = mandi_data.get("latest_price")
-    trend = mandi_data.get("trend")
-
-    if latest_price is None:
-        return {"error": "Invalid mandi price data"}
-
-    # -----------------------------
-    # 3️⃣ Profit Estimation
-    # -----------------------------
-    revenue = latest_price * quantity
-    transport_cost = 500
-    storage_cost = 300
-    total_cost = transport_cost + storage_cost
-    net_profit = revenue - total_cost
-
-    # -----------------------------
-    # 4️⃣ Final Decision Logic
-    # -----------------------------
-    if trend == "Rising" and risk_score != "High":
-        final_advice = "WAIT — Market rising and weather stable."
-    elif trend == "Falling":
-        final_advice = "SELL NOW — Prices dropping."
-    elif risk_score == "High":
-        final_advice = "SELL SOON — Weather risk high."
-    else:
-        final_advice = "Monitor market and weather conditions."
-
-    # -----------------------------
-    # 5️⃣ Return Unified Smart Output
-    # -----------------------------
-    return {
-        "weather_analysis": {
-            "max_temperature": float(max_temp),
-            "average_temperature": float(avg_temp),
-            "max_rainfall": float(max_rain),
-            "risk_score": risk_score
-        },
-        "market_analysis": {
-            "latest_price": latest_price,
-            "trend": trend
-        },
-        "profit_estimation": {
-            "quantity": quantity,
-            "expected_revenue": revenue,
-            "total_cost": total_cost,
-            "net_profit": net_profit
-        },
-        "final_advice": final_advice
-    }
+def smart_decision_engine(weather_data, quantity):
+    """
+    Make smart decisions based on weather and quantity
+    Returns decision analysis dict
+    """
+    try:
+        if isinstance(weather_data, dict):
+            temp = weather_data.get("temperature", 28.5)
+            humidity = weather_data.get("humidity", 65)
+            rainfall = weather_data.get("rainfall", 12.3)
+        else:
+            temp, humidity, rainfall = 28.5, 65, 12.3
+        
+        risk_score = 0
+        recommendations = []
+        
+        if temp > 35:
+            risk_score += 30
+            recommendations.append("High temperature: Consider cold storage")
+        elif temp < 10:
+            risk_score += 20
+            recommendations.append("Low temperature: Monitor for chilling damage")
+        
+        if humidity > 80:
+            risk_score += 25
+            recommendations.append("High humidity: Increase ventilation")
+        elif humidity < 50:
+            risk_score += 15
+            recommendations.append("Low humidity: Use misting system")
+        
+        if rainfall > 20:
+            risk_score += 20
+            recommendations.append("Heavy rainfall: Ensure drainage")
+        
+        risk_level = "low" if risk_score < 30 else "medium" if risk_score < 60 else "high"
+        
+        return {
+            "risk_score": min(risk_score, 100),
+            "risk_level": risk_level,
+            "recommendations": recommendations,
+            "quantity_assessed": quantity,
+            "optimal_action": "Monitor temperature and humidity"
+        }
+    except Exception as e:
+        print(f"Error in smart_decision_engine: {str(e)}")
+        return None
