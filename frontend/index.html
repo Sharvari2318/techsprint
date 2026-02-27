@@ -1,4 +1,3 @@
-there is a bit change, what all thing it was doing earlier in smart advisor , harvest and spoil risk in this code -
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -445,6 +444,12 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
             border-left-color: var(--primary-color);
         }
 
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border-left-color: var(--warning-color);
+        }
+
         /* ==================== LOADING ==================== */
         .spinner {
             border: 4px solid rgba(46, 204, 113, 0.2);
@@ -571,6 +576,12 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" data-page="cropInsight" href="#cropInsight">
+                            <span class="nav-icon">🌾</span>
+                            <span>Crop Insight</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" data-page="harvest" href="#harvest">
                             <span class="nav-icon">🌱</span>
                             <span>Harvest</span>
@@ -655,6 +666,41 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
                             <p>Loading advisor data...</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- CROP INSIGHT PAGE -->
+                <div class="page" id="cropInsightPage">
+
+                    <div class="table-container">
+                        <div class="table-title">Crop Insight Input</div>
+                        <div style="padding:20px;">
+                            <div class="form-group">
+                                <label>Crop Name</label>
+                                <input type="text" id="ciCrop" placeholder="Enter crop (e.g., Mango, Tomato, Apple)">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" id="ciLocation" placeholder="Enter location (e.g., Delhi, Mumbai)">
+                            </div>
+
+                            <button class="login-btn" onclick="loadCropInsightFull()">
+                                Get Complete Insight
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="ciAdvisor"></div>
+                    <div id="ciHarvest"></div>
+                    <div id="ciSpoilage"></div>
+
+                    <div class="chart-container">
+                        <div class="chart-title">Crop Risk Radar</div>
+                        <div class="chart-wrapper">
+                            <canvas id="ciRadarChart"></canvas>
+                        </div>
+                    </div>
+
                 </div>
 
                 <!-- HARVEST PAGE -->
@@ -882,6 +928,7 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
             const titles = {
                 dashboard: '📊 Dashboard',
                 advisor: '🤖 Smart Advisor',
+                cropInsight: '🌾 Crop Insight',
                 harvest: '🌱 Harvest Recommendations',
                 spoilage: '⚠️ Spoilage Risk Analysis'
             };
@@ -1097,6 +1144,160 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
             log('Dashboard loaded successfully', data);
         }
 
+        // ==================== FULL CROP INSIGHT ====================
+        async function loadCropInsightFull() {
+
+            const crop = document.getElementById("ciCrop").value.trim();
+            const location = document.getElementById("ciLocation").value.trim();
+
+            if (!crop || !location) {
+                showAlert("Please enter crop and location", "warning");
+                return;
+            }
+
+            const advisorRes = await fetchAPI(`/smart-advisor?crop=${crop}&location=${location}`);
+            const harvestRes = await fetchAPI(`/harvest-recommendation?crop=${crop}&location=${location}`);
+            const spoilageRes = await fetchAPI(`/spoilage-risk?crop=${crop}&location=${location}`);
+
+            if (!advisorRes.success || !harvestRes.success || !spoilageRes.success) {
+                showAlert("Failed to load crop insight data", "error");
+                return;
+            }
+
+            const advisorData = advisorRes.data || {};
+            const harvestData = harvestRes.data || {};
+            const spoilageData = spoilageRes.data || {};
+
+            document.getElementById("ciAdvisor").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">Smart Advisor Analysis for ${crop}</div>
+                    <pre>${JSON.stringify(advisorData, null, 2)}</pre>
+                </div>
+            `;
+
+            let harvestRows = "";
+
+            if (harvestData.recommendations && Array.isArray(harvestData.recommendations)) {
+                harvestData.recommendations.forEach(rec => {
+                    const priority = rec.priority || 'normal';
+                    const badge = priority === 'high' ? 'danger' : priority === 'medium' ? 'warning' : 'success';
+                    harvestRows += `
+                        <tr>
+                            <td>${rec.title || 'N/A'}</td>
+                            <td>${rec.description || 'N/A'}</td>
+                            <td><span class="badge ${badge}">${priority.toUpperCase()}</span></td>
+                        </tr>
+                    `;
+                });
+            } else {
+                harvestRows = `<tr><td colspan="3" style="text-align: center; color: #999;">No harvest data available</td></tr>`;
+            }
+
+            document.getElementById("ciHarvest").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">Harvest Recommendations for ${crop}</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>${harvestRows}</tbody>
+                    </table>
+                </div>
+            `;
+
+            let spoilageRows = "";
+
+            if (spoilageData.spoilage_risks && Array.isArray(spoilageData.spoilage_risks)) {
+                spoilageData.spoilage_risks.forEach(risk => {
+                    const riskLevel = risk.risk_level || 'medium';
+                    const badge = riskLevel === 'high' ? 'danger' : riskLevel === 'medium' ? 'warning' : 'success';
+                    spoilageRows += `
+                        <tr>
+                            <td>${risk.crop || 'N/A'}</td>
+                            <td><span class="badge ${badge}">${riskLevel.toUpperCase()}</span></td>
+                            <td>${risk.timeline || 'N/A'}</td>
+                            <td>${risk.action || 'Monitor'}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                spoilageRows = `<tr><td colspan="4" style="text-align: center; color: #999;">No spoilage data available</td></tr>`;
+            }
+
+            document.getElementById("ciSpoilage").innerHTML = `
+                <div class="table-container">
+                    <div class="table-title">Spoilage Risk Assessment for ${crop}</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Crop</th>
+                                <th>Risk Level</th>
+                                <th>Timeline</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>${spoilageRows}</tbody>
+                    </table>
+                </div>
+            `;
+
+            if (window.ciChart) window.ciChart.destroy();
+
+            const ciRadarCtx = document.getElementById("ciRadarChart");
+            if (ciRadarCtx) {
+                window.ciChart = new Chart(ciRadarCtx, {
+                    type: "radar",
+                    data: {
+                        labels: ["Weather", "Market", "Storage", "Transport", "Disease"],
+                        datasets: [{
+                            label: "Risk Score",
+                            data: [
+                                advisorData.risk_radar_data?.weather || 50,
+                                advisorData.risk_radar_data?.market || 50,
+                                advisorData.risk_radar_data?.storage || 50,
+                                advisorData.risk_radar_data?.transportation || 50,
+                                advisorData.risk_radar_data?.disease || 50
+                            ],
+                            borderColor: 'rgb(46, 204, 113)',
+                            backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                            borderWidth: 2,
+                            pointBackgroundColor: 'rgb(46, 204, 113)',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: { color: '#ecf0f1' }
+                            }
+                        },
+                        scales: {
+                            r: {
+                                beginAtZero: true,
+                                max: 100,
+                                ticks: {
+                                    color: '#999',
+                                    backdropColor: 'transparent'
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            showAlert(`Crop Insight loaded successfully for ${crop}!`, 'success');
+        }
+
         // ==================== LOGIN/LOGOUT ====================
         function handleLogin(event) {
             event.preventDefault();
@@ -1129,6 +1330,8 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
                 Object.keys(State.charts).forEach(key => destroyChart(key));
                 State.charts = {};
 
+                if (window.ciChart) window.ciChart.destroy();
+
                 document.getElementById('loginForm').reset();
                 document.getElementById('dashboardContainer').classList.remove('active');
                 document.getElementById('loginContainer').style.display = 'flex';
@@ -1157,6 +1360,7 @@ there is a bit change, what all thing it was doing earlier in smart advisor , ha
         // ==================== CLEANUP ====================
         window.addEventListener('beforeunload', function() {
             Object.keys(State.charts).forEach(key => destroyChart(key));
+            if (window.ciChart) window.ciChart.destroy();
         });
     </script>
 
